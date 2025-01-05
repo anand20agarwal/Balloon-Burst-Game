@@ -92,9 +92,9 @@ function update(time) {
             }
         }
 
-        // Hide thread once balloon leaves
+        
         if (!balloonContainer.isFlying && thread.alpha === 1) {
-            thread.setAlpha(0); // Hide thread when balloon is not flying
+            thread.setAlpha(0);
         }
     });
 }
@@ -120,7 +120,7 @@ function inflateBalloon() {
             balloonContainer.pumpCount += 1;
         }
 
-        // Show thread only when the balloon reaches max size
+        
         if (balloon.scale >= maxSize && !balloonContainer.isFlying) {
             thread.setAlpha(1); // Show thread
             balloonContainer.isFlying = true;
@@ -140,7 +140,7 @@ function activateBalloon(index, isVisible) {
     balloon.setTexture(balloonContainer.defaultImage);
     balloon.setAlpha(isVisible ? 1 : 0).setScale(0.1);
     char.setAlpha(isVisible ? 1 : 0).setScale(0.05);
-    thread.setAlpha(isVisible ? 1 : 0).setScale(0.3); // Reset thread visibility
+    thread.setAlpha(isVisible ? 1 : 0).setScale(0.3); 
     balloonContainer.isFlying = false;
     balloonContainer.setPosition(config.width - 180, config.height - 135);
     balloonContainer.pumpCount = 0;
@@ -156,7 +156,7 @@ function burstBalloon(balloonContainer) {
     balloon.setTexture('pop');
     balloon.setScale(0.4);
     char.setAlpha(0);
-    thread.setAlpha(0); // Hide thread
+    thread.setAlpha(0); 
 
     this.time.delayedCall(200, () => {
         balloon.setAlpha(0);
