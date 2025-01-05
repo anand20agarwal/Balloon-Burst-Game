@@ -49,7 +49,7 @@ function create() {
 
         const balloon = this.physics.add.sprite(0, 0, balloonImage).setScale(0.1).setAlpha(0);
         const char = this.add.sprite(0, 0, charImage).setScale(0.05).setAlpha(0);
-        const thread = this.add.sprite(10, 100, 'thread').setScale(0.3).setAlpha(0); // Thread under balloon
+        const thread = this.add.sprite(10, 100, 'thread').setScale(0.3).setAlpha(0); 
 
         balloonContainer.add(balloon);
         balloonContainer.add(char);
@@ -122,7 +122,7 @@ function inflateBalloon() {
 
         
         if (balloon.scale >= maxSize && !balloonContainer.isFlying) {
-            thread.setAlpha(1); // Show thread
+            thread.setAlpha(1); 
             balloonContainer.isFlying = true;
             balloonContainer.startTime = this.time.now;
             currentBalloonIndex = (currentBalloonIndex + 1) % balloons.length;
