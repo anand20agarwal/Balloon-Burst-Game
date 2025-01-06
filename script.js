@@ -49,7 +49,7 @@ function create() {
 
         const balloon = this.physics.add.sprite(0, 0, balloonImage).setScale(0.1).setAlpha(0);
         const char = this.add.sprite(0, 0, charImage).setScale(0.05).setAlpha(0);
-        const thread = this.add.sprite(10, 100, 'thread').setScale(0.3).setAlpha(0); 
+        const thread = this.add.sprite(10, 100, 'thread').setScale(0.3).setAlpha(0);
 
         balloonContainer.add(balloon);
         balloonContainer.add(char);
@@ -62,6 +62,7 @@ function create() {
         balloonContainer.defaultImage = balloonImage;
         balloonContainer.pumpCount = 0;
         balloonContainer.startTime = 0;
+        balloonContainer.targetScale = null;
 
         balloonContainer.setInteractive(new Phaser.Geom.Circle(0, 0, 50), Phaser.Geom.Circle.Contains);
         balloonContainer.on('pointerdown', () => {
@@ -71,7 +72,7 @@ function create() {
         balloons.push(balloonContainer);
     }
 
-    pumpButton = this.add.sprite(config.width - 100, config.height - 100, 'pump').setInteractive();
+    pumpButton = this.add.sprite(config.width - 100, config.height - 105, 'pump').setInteractive();
     pumpButton.setScale(0.3);
     pumpButton.on('pointerdown', inflateBalloon, this);
 
@@ -83,6 +84,15 @@ function update(time) {
         const balloon = balloonContainer.balloon;
         const thread = balloonContainer.thread;
 
+        if (balloonContainer.targetScale && balloon.scale < balloonContainer.targetScale) {
+            const scaleStep = 0.01;
+            balloon.setScale(Math.min(balloon.scale + scaleStep, balloonContainer.targetScale));
+        }
+
+        if (balloonContainer.targetScale && balloon.scale >= balloonContainer.targetScale) {
+            balloonContainer.targetScale = null;
+        }
+
         if (balloonContainer.isFlying) {
             balloonContainer.x -= 1.2;
             balloonContainer.y -= 1 + Math.sin((time - balloonContainer.startTime) / 200) * 2;
@@ -92,7 +102,6 @@ function update(time) {
             }
         }
 
-        
         if (!balloonContainer.isFlying && thread.alpha === 1) {
             thread.setAlpha(0);
         }
@@ -109,20 +118,19 @@ function inflateBalloon() {
         balloon.setAlpha(1);
         char.setAlpha(1);
 
-        if (balloon.scale < maxSize) {
-            balloon.setScale(balloon.scale + 0.05);
-            char.setScale(char.scale + 0.03);
-
-            if (balloonContainer.pumpCount > 0) {
-                balloonContainer.y -= 9;
-            }
-
-            balloonContainer.pumpCount += 1;
+        if (!balloonContainer.targetScale) {
+            balloonContainer.targetScale = Math.min(balloon.scale + 0.05, maxSize);
         }
 
-        
+        if (balloonContainer.targetScale <= maxSize) {
+            balloon.setScale(Math.min(balloon.scale + 0.01, balloonContainer.targetScale));
+            char.setScale(Math.min(char.scale + 0.5, balloonContainer.targetScale * 0.5));
+            balloonContainer.pumpCount += 1;
+            balloonContainer.y -= 9;
+        }
+
         if (balloon.scale >= maxSize && !balloonContainer.isFlying) {
-            thread.setAlpha(1); 
+            thread.setAlpha(1);
             balloonContainer.isFlying = true;
             balloonContainer.startTime = this.time.now;
             currentBalloonIndex = (currentBalloonIndex + 1) % balloons.length;
@@ -140,10 +148,11 @@ function activateBalloon(index, isVisible) {
     balloon.setTexture(balloonContainer.defaultImage);
     balloon.setAlpha(isVisible ? 1 : 0).setScale(0.1);
     char.setAlpha(isVisible ? 1 : 0).setScale(0.05);
-    thread.setAlpha(isVisible ? 1 : 0).setScale(0.3); 
+    thread.setAlpha(isVisible ? 1 : 0).setScale(0.3);
     balloonContainer.isFlying = false;
     balloonContainer.setPosition(config.width - 180, config.height - 135);
     balloonContainer.pumpCount = 0;
+    balloonContainer.targetScale = null;
 }
 
 function burstBalloon(balloonContainer) {
@@ -156,7 +165,7 @@ function burstBalloon(balloonContainer) {
     balloon.setTexture('pop');
     balloon.setScale(0.4);
     char.setAlpha(0);
-    thread.setAlpha(0); 
+    thread.setAlpha(0);
 
     this.time.delayedCall(200, () => {
         balloon.setAlpha(0);
