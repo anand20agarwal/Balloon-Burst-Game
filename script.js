@@ -80,7 +80,7 @@ function create() {
 }
 
 function update(time) {
-    balloons.forEach(balloonContainer => {
+    balloons.forEach(balloonContainer => {  
         const balloon = balloonContainer.balloon;
         const thread = balloonContainer.thread;
 
