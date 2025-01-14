@@ -40,7 +40,7 @@ function preload() {
 }
 
 function create() {
-    this.add.image(config.width / 2, config.height / 2, 'background').setScale(1.5);
+    this.add.image(config.width / 2, config.height / 2, 'background').setScale(0.65);
 
     for (let i = 0; i < 5; i++) {
         const balloonImage = `balloon${i + 1}`;
@@ -54,7 +54,7 @@ function create() {
         balloonContainer.add(balloon);
         balloonContainer.add(char);
         balloonContainer.add(thread);
-
+        
         balloonContainer.balloon = balloon;
         balloonContainer.char = char;
         balloonContainer.thread = thread;
