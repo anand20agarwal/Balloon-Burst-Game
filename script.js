@@ -54,10 +54,10 @@ function create() {
         balloonContainer.add(balloon);
         balloonContainer.add(char);
         balloonContainer.add(thread);
-        
+
         balloonContainer.balloon = balloon;
         balloonContainer.char = char;
-        balloonContainer.thread = thread;
+        balloonContainer.thread = thread;   
         balloonContainer.isFlying = false;
         balloonContainer.defaultImage = balloonImage;
         balloonContainer.pumpCount = 0;
