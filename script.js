@@ -52,7 +52,7 @@ function create() {
         const thread = this.add.sprite(10, 100, 'thread').setScale(0.3).setAlpha(0);
 
         balloonContainer.add(balloon);
-        balloonContainer.add(char);
+        balloonContainer.add(char); 
         balloonContainer.add(thread);
 
         balloonContainer.balloon = balloon;
